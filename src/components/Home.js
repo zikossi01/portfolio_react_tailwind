@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import $ from "jquery";
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS CSS
 
 function Home() {
     // Skill data with percentage values
@@ -12,6 +14,9 @@ function Home() {
     ];
 
     useEffect(() => {
+        // Initialize AOS with 'once: false' so animations trigger multiple times
+        AOS.init({ duration: 1200, once: false });
+
         // Animations for skill and project cards
         $(".skill-card, .project-card")
             .css({ opacity: 0, transform: "translateY(50px)", transition: "transform 0.5s ease, opacity 0.5s ease" })
@@ -64,7 +69,6 @@ function Home() {
             });
     }, []);
 
-    // Hero background gradient animation (out-of-this-world)
     const heroStyle = {
         background: "linear-gradient(45deg, #FF61A6, #4E73DF, #7F00FF)",
         backgroundSize: "400% 400%",
@@ -150,21 +154,26 @@ function Home() {
         <div>
             {/* Hero Section */}
             <section style={heroStyle}>
-                <div style={heroContentStyle}>
+                <div style={heroContentStyle} data-aos="fade-up">
                     <h1 id="hero-title" style={heroTitleStyle}>
                         Hey, I'm Zakariyae!
                     </h1>
                     <p id="hero-text" style={heroTextStyle}>
                         Building the future of web experiences with code!
                     </p>
-                    <a href="#about" id="cta-button" style={ctaButtonStyle}>
+                    <a href="#about" id="cta-button" style={ctaButtonStyle} data-aos="zoom-in" data-aos-delay="300">
                         Let's Go
                     </a>
                 </div>
             </section>
 
             {/* About Section */}
-            <section id="about" style={{ ...sectionStyle, backgroundColor: "#F1F1F1" }} className="fade-in section">
+            <section
+                id="about"
+                style={{ ...sectionStyle, backgroundColor: "#F1F1F1" }}
+                className="fade-in section"
+                data-aos="fade-up"
+            >
                 <h2 style={sectionTitleStyle}>About Me</h2>
                 <p style={{ color: "#333", fontSize: "1.2rem", fontWeight: "300" }}>
                     Full-Stack JavaScript Developer with experience in React, Node.js, Express, and MongoDB. Passionate about building user-friendly and scalable web applications. Looking for new opportunities to collaborate!
@@ -172,123 +181,176 @@ function Home() {
             </section>
 
             {/* Skills Section */}
-            <section id="skills" style={{ ...sectionStyle, backgroundColor: "#282C34", color: "white" }} className="fade-in section">
-                <h2 style={sectionTitleStyle}>Skills</h2>
+            <section
+    id="skills"
+    style={{
+        ...sectionStyle,
+        backgroundColor: "#282C34",
+        color: "white",
+        padding: "6rem 2rem",
+        textAlign: "center",
+    }}
+    className="fade-in section"
+    data-aos="fade-up"
+>
+    <h2 style={sectionTitleStyle}>Skills</h2>
+    <div
+        style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+            gap: "2rem",
+            marginTop: "3rem",
+        }}
+    >
+        {skills
+            .filter((skill) => skill.name !== "Node.js") // Remove Node.js from the skills
+            .map((skill, index) => (
                 <div
+                    key={index}
+                    className="skill-card fade-in"
+                    data-aos="zoom-in-up"
+                    data-aos-delay={index * 200}
                     style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                        gap: "2rem",
-                        marginTop: "3rem",
+                        backgroundColor: "#FF61A6",
+                        width: "220px",
+                        height: "220px",
+                        borderRadius: "50%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        textAlign: "center",
+                        fontSize: "1.4rem",
+                        fontWeight: "600",
+                        color: "white",
+                        boxShadow: "0px 10px 25px rgba(255, 97, 166, 0.4)",
+                        opacity: 0,
+                        transform: "translateY(50px) scale(0.8)",
+                        transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                        padding: "2rem",
                     }}
                 >
-                    {skills.map((skill, index) => (
-                        <div
-                            key={index}
-                            className="skill-card fade-in"
-                            style={{
-                                backgroundColor: "#FF61A6",
-                                width: "200px",
-                                height: "200px",
-                                borderRadius: "50%", // Circular shape
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                flexDirection: "column",
-                                textAlign: "center",
-                                fontSize: "1.4rem",
-                                fontWeight: "600",
-                                color: "white",
-                                boxShadow: "0px 10px 20px rgba(255, 97, 166, 0.3)",
-                                opacity: 0,
-                                transform: "translateY(50px) scale(0.8)", // Initial state for animation
-                                transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                            }}
-                        >
-                            <svg
-                                width="120"
-                                height="120"
-                                viewBox="0 0 120 120"
-                                style={{ transform: "rotate(-90deg)", transition: "stroke-dashoffset 1s ease" }}
-                            >
-                                <circle
-                                    cx="60"
-                                    cy="60"
-                                    r="50"
-                                    stroke="#fff"
-                                    strokeWidth="10"
-                                    fill="transparent"
-                                    strokeDasharray="314"
-                                    strokeDashoffset={(314 * (100 - skill.percentage)) / 100} // Percentage-based offset
-                                />
-                                <circle
-                                    cx="60"
-                                    cy="60"
-                                    r="50"
-                                    stroke="#FF61A6"
-                                    strokeWidth="10"
-                                    fill="transparent"
-                                    strokeDasharray="314"
-                                    strokeDashoffset="0"
-                                />
-                                <text
-                                    x="50%"
-                                    y="50%"
-                                    textAnchor="middle"
-                                    dy="0.3em"
-                                    fontSize="18"
-                                    fill="#fff"
-                                >
-                                    {skill.percentage}%
-                                </text>
-                            </svg>
-                            <div>{skill.name}</div>
-                        </div>
-                    ))}
+                    <svg
+                        width="100"
+                        height="100"
+                        viewBox="0 0 120 120"
+                        style={{
+                            transform: "rotate(-90deg)",
+                            transition: "stroke-dashoffset 1s ease",
+                            marginBottom: "1rem", // Added margin for spacing
+                        }}
+                    >
+                        <circle
+                            cx="60"
+                            cy="60"
+                            r="45"
+                            stroke="#fff"
+                            strokeWidth="8"
+                            fill="transparent"
+                            strokeDasharray="282"
+                            strokeDashoffset="282" // Set initial value for animation
+                            className="circle-background"
+                        />
+                        <circle
+                            cx="60"
+                            cy="60"
+                            r="45"
+                            stroke="#FF61A6"
+                            strokeWidth="8"
+                            fill="transparent"
+                            strokeDasharray="282"
+                            strokeDashoffset="282" // Set initial value for animation
+                            className="circle-progress"
+                            data-skill={skill.percentage}
+                        />
+                    </svg>
+                    <div style={{ fontSize: "1.2rem", marginTop: "0.5rem" }}>{skill.name}</div>
+                    <div
+                        style={{
+                            fontSize: "1.2rem",
+                            fontWeight: "500",
+                            color: "#fff",
+                            marginTop: "10px",
+                        }}
+                    >
+                        {skill.percentage}%
+                    </div>
                 </div>
-            </section>
+            ))}
+    </div>
+</section>
+
 
             {/* Projects Section */}
-            <section id="projects" style={{ ...sectionStyle, backgroundColor: "#F1F1F1" }} className="fade-in section">
+            <section
+                id="projects"
+                style={{ ...sectionStyle, backgroundColor: "#F1F1F1" }}
+                className="fade-in section"
+                data-aos="fade-up"
+            >
                 <h2 style={sectionTitleStyle}>My Projects</h2>
                 <div
                     style={{
                         display: "flex",
                         justifyContent: "center",
-                        gap: "2rem",
+                        gap: "1rem", // Reduced gap
                         marginTop: "2rem",
+                        flexWrap: "wrap", // Allow wrapping
+                        justifyItems: "center", // Center alignment of items
                     }}
                 >
                     {["Project 1", "Project 2", "Project 3", "Project 4"].map((project, index) => (
-                        <div
+                        <a
                             key={index}
-                            className="project-card fade-in"
+                            href={`https://github.com/yourusername/${project.toLowerCase().replace(" ", "-")}`} // GitHub link to each project
+                            target="_blank"
+                            rel="noopener noreferrer"
                             style={{
-                                backgroundColor: "#222",
-                                color: "white",
-                                padding: "2rem",
-                                borderRadius: "15px",
-                                width: "300px",
-                                textAlign: "center",
-                                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                                boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.3)",
+                                textDecoration: "none", // Remove the underline
                             }}
                         >
-                            <h3 style={{ fontSize: "1.8rem" }}>{project}</h3>
-                            <p style={{ fontSize: "1.2rem", color: "#bbb" }}>A dynamic web application.</p>
-                        </div>
+                            <div
+                                className="project-card fade-in"
+                                data-aos="flip-left"
+                                data-aos-delay={index * 300}
+                                style={{
+                                    backgroundColor: "#222",
+                                    color: "white",
+                                    padding: "1.5rem", // Reduced padding
+                                    borderRadius: "15px",
+                                    width: "250px", // Smaller width
+                                    textAlign: "center",
+                                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                                    boxShadow: "0px 5px 20px rgba(0, 0, 0, 0.3)",
+                                }}
+                            >
+                                <h3 style={{ fontSize: "1.6rem" }}>{project}</h3>
+                                <p style={{ fontSize: "1.2rem", color: "#bbb" }}>A dynamic web application.</p>
+                            </div>
+                        </a>
                     ))}
                 </div>
             </section>
 
             {/* Contact Section */}
-            <section id="contact" style={{ ...sectionStyle, backgroundColor: "#222", color: "white" }} className="fade-in section">
+            <section
+                id="contact"
+                style={{ ...sectionStyle, backgroundColor: "#222", color: "white" }}
+                className="fade-in section"
+                data-aos="fade-up"
+            >
                 <h2 style={sectionTitleStyle}>Get in Touch</h2>
                 <form style={{ maxWidth: "600px", margin: "0 auto" }}>
-                    <input type="text" placeholder="Your Name" style={inputStyle} />
-                    <input type="email" placeholder="Your Email" style={inputStyle} />
-                    <textarea placeholder="Your Message" style={{ ...inputStyle, minHeight: "150px" }}></textarea>
-                    <button type="submit" style={ctaButtonStyle}>Send Message</button>
+                    <input type="text" placeholder="Your Name" style={inputStyle} data-aos="fade-up" />
+                    <input type="email" placeholder="Your Email" style={inputStyle} data-aos="fade-up" />
+                    <textarea
+                        placeholder="Your Message"
+                        style={{ ...inputStyle, minHeight: "150px" }}
+                        data-aos="fade-up"
+                    ></textarea>
+                    <button type="submit" style={ctaButtonStyle} data-aos="zoom-in-up">
+                        Send Message
+                    </button>
                 </form>
             </section>
         </div>
